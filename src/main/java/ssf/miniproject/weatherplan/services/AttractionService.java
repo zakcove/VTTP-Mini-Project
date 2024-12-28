@@ -36,7 +36,9 @@ public class AttractionService {
                     Map<String, String> details = new HashMap<>();
                     details.put("name", event.getString("name"));
                     details.put("date", event.getJSONObject("dates").getJSONObject("start").getString("localDate"));
-                    details.put("venue", event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
+                    details.put("venue",
+                            event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
+                    details.put("url", event.optString("url", "#"));
                     attractions.add(details);
                 }
             }

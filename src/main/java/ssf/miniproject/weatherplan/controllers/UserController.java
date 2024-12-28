@@ -96,34 +96,34 @@ public class UserController {
     @PostMapping("/bookmark")
     public String bookmarkEvent(
             @RequestParam String email,
-        @RequestParam String name,
-        @RequestParam String date,
-        @RequestParam String venue,
-        @RequestParam(required = false) String location,
-        Model model) {
+            @RequestParam String name,
+            @RequestParam String date,
+            @RequestParam String venue,
+            @RequestParam String url,
+            @RequestParam(required = false) String location,
+            Model model) {
 
-    Map<String, String> bookmark = Map.of(
-            "name", name,
-            "date", date,
-            "venue", venue
-    );
+        Map<String, String> bookmark = Map.of(
+                "name", name,
+                "date", date,
+                "venue", venue,
+                "url", url);
 
-    redisBookmarkRepository.addBookmark(email, bookmark);
+        redisBookmarkRepository.addBookmark(email, bookmark);
 
-    Set<Map<String, String>> bookmarks = redisBookmarkRepository.getBookmarks(email);
+        Set<Map<String, String>> bookmarks = redisBookmarkRepository.getBookmarks(email);
 
-    if (location != null) {
-        List<Map<String, String>> weather = weatherService.getWeather(location);
-        List<Map<String, String>> attractions = attractionService.getAttractions(location);
-        SearchResults searchResults = new SearchResults(location, weather, attractions);
-        model.addAttribute("searchResults", searchResults);
+        if (location != null) {
+            List<Map<String, String>> weather = weatherService.getWeather(location);
+            List<Map<String, String>> attractions = attractionService.getAttractions(location);
+            model.addAttribute("searchResults", new SearchResults(location, weather, attractions));
+        }
+
+        model.addAttribute("email", email);
+        model.addAttribute("bookmarks", bookmarks);
+
+        return "home";
     }
-
-    model.addAttribute("email", email);
-    model.addAttribute("bookmarks", bookmarks);
-
-    return "home"; 
-}
 
     @PostMapping("/delete-bookmark")
     public String deleteBookmark(
@@ -131,12 +131,14 @@ public class UserController {
             @RequestParam String name,
             @RequestParam String date,
             @RequestParam String venue,
+            @RequestParam String url,
             Model model) {
 
         Map<String, String> bookmark = Map.of(
                 "name", name,
                 "date", date,
-                "venue", venue);
+                "venue", venue,
+                "url", url);
 
         redisBookmarkRepository.removeBookmark(email, bookmark);
 

@@ -81,23 +81,5 @@ public class ApiController {
 
         return "Bookmark deleted successfully!";
     }
-
-    @GetMapping("/cached-search")
-    public Map<String, Object> getCachedSearch(
-            @RequestParam String email,
-            @RequestParam String location) {
-
-        Map<Object, Object> cachedSearch = redisBookmarkRepository.getCachedSearch(email, location);
-
-        if (cachedSearch.isEmpty()) {
-            return Map.of("message", "No cached results found for the given location.");
-        }
-
-        return Map.of(
-                "location", cachedSearch.get("location"),
-                "weather", cachedSearch.get("weather"),
-                "attractions", cachedSearch.get("attractions")
-        );
-    }
 }
 

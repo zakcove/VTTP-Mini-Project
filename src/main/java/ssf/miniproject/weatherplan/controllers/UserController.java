@@ -38,17 +38,17 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String loginPage() {
         return "login";
     }
 
     @GetMapping("/login-error")
-    public String showLoginErrorPage() {
+    public String loginErrorPage() {
         return "login-error";
     }
 
     @GetMapping("/register")
-    public String showRegistrationPage() {
+    public String registrationPage() {
         return "register";
     }
 
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @GetMapping("/home")
-    public String showHomePage(Model model, Principal principal) {
+    public String homePage(Model model, Principal principal) {
         String email = principal.getName();
         Set<Map<String, String>> bookmarks = redisBookmarkRepository.getBookmarks(email);
         model.addAttribute("email", email);

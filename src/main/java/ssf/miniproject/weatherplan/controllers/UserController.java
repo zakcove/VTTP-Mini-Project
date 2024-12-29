@@ -1,6 +1,7 @@
 package ssf.miniproject.weatherplan.controllers;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,6 +85,8 @@ public class UserController {
 
         List<Map<String, String>> attractions = attractionService.getAttractions(location);
 
+        attractions.sort(Comparator.comparing(event -> event.get("date")));
+
         SearchResults searchResults = new SearchResults(location, weather, attractions);
 
         model.addAttribute("email", email);
@@ -97,7 +100,7 @@ public class UserController {
     public String bookmarkEvent(
             @RequestParam String email,
             @RequestParam String name,
-            @RequestParam String date,
+            @RequestParam String date,  
             @RequestParam String venue,
             @RequestParam String url,
             @RequestParam(required = false) String location,
